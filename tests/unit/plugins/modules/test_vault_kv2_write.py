@@ -160,4 +160,4 @@ class TestModuleVaultKv2Write:
         result = json.loads(out)
 
         assert e.value.code != 0, "result: %r" % (result,)
-        assert result["msg"] == "throwaway msg", "result: %r" % result
+        assert result["msg"] == "InvalidPath writing to", "result: %r" % result
