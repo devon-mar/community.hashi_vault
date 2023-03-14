@@ -170,7 +170,7 @@
     - name: Test write cas (check=true)
       check_mode: true
       community.hashi_vault.vault_kv2_write: &write_cas
-        cas: 3
+        cas: 2
         path: "{{ vault_kv2_path }}/write1"
         data: "{{ write_data2 }}"
         read: true
