@@ -127,7 +127,7 @@ class TestModuleVaultKv2Write:
         assert "Vault response did not contain data" in result["msg"]
 
     @pytest.mark.parametrize(
-        "patch_ansible_module", [_combined_options(read=False)], indirect=True
+        "patch_ansible_module", [_combined_options(read=True)], indirect=True
     )
     def test_vault_kv2_write_read_vault_error(self, vault_client, capfd):
         client = vault_client
