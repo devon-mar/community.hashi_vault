@@ -126,14 +126,15 @@ class TestModuleVaultKv2Write:
         assert e.value.code != 0, "result: %r" % (result,)
         assert "Vault response did not contain data" in result["msg"]
 
-    @pytest.mark.parametrize("exc", [hvac.exceptions.VaultError("throwaway msg")])
     @pytest.mark.parametrize(
         "patch_ansible_module", [_combined_options()], indirect=True
     )
-    def test_vault_kv2_write_read_vault_error(self, vault_client, capfd, exc):
+    def test_vault_kv2_write_read_vault_error(self, vault_client, capfd):
         client = vault_client
 
-        client.secrets.kv.v2.read_secret_version.side_effect = exc
+        client.secrets.kv.v2.read_secret_version.side_effect = (
+            hvac.exceptions.VaultError
+        )
 
         with pytest.raises(SystemExit) as e:
             vault_kv2_write.main()
@@ -141,8 +142,8 @@ class TestModuleVaultKv2Write:
         out, err = capfd.readouterr()
         result = json.loads(out)
 
-        assert e.value.code != 0, "result: %r" % (result,)
-        assert result["msg"] == "throwaway msg", "result: %r" % result
+        assert e.value.code != 0, f"result: {result}"
+        assert "VaultError reading" in result["msg"], f"result: {result}"
 
     @pytest.mark.parametrize("exc", [hvac.exceptions.InvalidPath("throwaway msg")])
     @pytest.mark.parametrize(
@@ -159,5 +160,5 @@ class TestModuleVaultKv2Write:
         out, err = capfd.readouterr()
         result = json.loads(out)
 
-        assert e.value.code != 0, "result: %r" % (result,)
-        assert result["msg"] == "InvalidPath writing to", "result: %r" % result
+        assert e.value.code != 0, f"result: {result}"
+        assert "InvalidPath writing to" in result["msg"], f"result: {result}"
