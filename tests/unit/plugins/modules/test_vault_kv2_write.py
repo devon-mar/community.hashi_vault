@@ -132,9 +132,7 @@ class TestModuleVaultKv2Write:
     def test_vault_kv2_write_read_vault_error(self, vault_client, capfd):
         client = vault_client
 
-        client.secrets.kv.v2.read_secret_version.side_effect = (
-            hvac.exceptions.VaultError
-        )
+        client.secrets.kv.v2.read_secret_version.side_effect = hvac.exceptions.VaultError
 
         with pytest.raises(SystemExit) as e:
             vault_kv2_write.main()
@@ -161,4 +159,4 @@ class TestModuleVaultKv2Write:
         result = json.loads(out)
 
         assert e.value.code != 0, f"result: {result}"
-        assert "InvalidPath writing to" in result["msg"], f"result: {result}"
+        assert  "InvalidPath writing to" in result["msg"], f"result: {result}"
