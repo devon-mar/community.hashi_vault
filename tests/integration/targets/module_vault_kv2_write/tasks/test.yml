@@ -172,8 +172,7 @@
       community.hashi_vault.vault_kv2_write: &write_cas
         cas: 3
         path: "{{ vault_kv2_path }}/write1"
-        data:
-          foo: bar
+        data: "{{ write_data2 }}"
         read: true
       register: result
 
@@ -184,8 +183,8 @@
     - assert:
         that:
           - result is changed
-          - ci_read.result.data.data == write_data2
-          - ci_read.result.data.metadata.version == 3
+          - ci_read.result.data.data == write_data1
+          - ci_read.result.data.metadata.version == 2
 
     - name: Test write cas (check=false)
       community.hashi_vault.vault_kv2_write: *write_cas
@@ -198,8 +197,8 @@
     - assert:
         that:
           - result is changed
-          - ci_read.result.data.data == write_data3
-          - ci_read.result.data.metadata.version == 4
+          - ci_read.result.data.data == write_data2
+          - ci_read.result.data.metadata.version == 3
 
     - name: Test write cas (idempotency)
       community.hashi_vault.vault_kv2_write: *write_cas
@@ -212,8 +211,8 @@
     - assert:
         that:
           - result is not changed
-          - ci_read.result.data.data == write_data3
-          - ci_read.result.data.metadata.version == 4
+          - ci_read.result.data.data == write_data2
+          - ci_read.result.data.metadata.version == 3
 
     - name: Test write cas wrong value
       ignore_errors: true
