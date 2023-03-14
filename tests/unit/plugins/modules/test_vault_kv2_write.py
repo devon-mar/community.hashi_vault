@@ -142,8 +142,8 @@ class TestModuleVaultKv2Write:
         out, err = capfd.readouterr()
         result = json.loads(out)
 
-        assert e.value.code != 0, f"result: {result}"
-        assert "VaultError reading" in result["msg"], f"result: {result}"
+        assert e.value.code != 0, "result: %r" % (result,)
+        assert "VaultError reading" in result["msg"], "result: %r" % (result,)
 
     @pytest.mark.parametrize("exc", [hvac.exceptions.InvalidPath("throwaway msg")])
     @pytest.mark.parametrize(
@@ -160,5 +160,5 @@ class TestModuleVaultKv2Write:
         out, err = capfd.readouterr()
         result = json.loads(out)
 
-        assert e.value.code != 0, f"result: {result}"
-        assert "InvalidPath writing to" in result["msg"], f"result: {result}"
+        assert e.value.code != 0, "result: %r" % (result,)
+        assert "InvalidPath writing to" in result["msg"], "result: %r" % (result,)
